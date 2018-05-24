@@ -137,6 +137,17 @@ class KneserNeyLM:
                 return order[ngram[i:]]
         return None
 
+    def logprob2(self, ngram):
+        """
+        Similar to logprob, but handles ngram with variant length
+        """
+        padded = ((self.start_pad_symbol,) * (self.highest_order - len(ngram)) + ngram)
+        for i, order in enumerate(self.lm):
+            if padded[i:] in order:
+                return order[padded[i:]]
+        return None
+
+
     def score_sent(self, sent):
         """
         Return log prob of the sentence.
